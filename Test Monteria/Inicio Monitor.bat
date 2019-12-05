@@ -1,0 +1,1 @@
+powershell -noprofile -command "&{ start-process powershell -ArgumentList '-noprofile -file C:\Trazadora\StartMonitoring.ps1' -verb RunAs}"
