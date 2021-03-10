@@ -1,0 +1,156 @@
+### SET FOLDER TO WATCH + FILES TO WATCH + SUBFOLDERS YES/NO
+Add-Type -AssemblyName System.Windows.Forms
+Add-Type -AssemblyName System.Drawing
+
+Set-ExecutionPolicy RemoteSigned
+    $watcher = New-Object System.IO.FileSystemWatcher
+    $watcher.Path = "C:\oo\traces"
+    $watcher.Filter = "*.oma"
+    $watcher.IncludeSubdirectories = $true
+    $watcher.EnableRaisingEvents = $true
+
+
+
+### DEFINE ACTIONS AFTER AN EVENT IS DETECTED
+    $action = { $path = $Event.SourceEventArgs.FullPath
+                $changeType = $Event.SourceEventArgs.ChangeType
+$name = $Event.SourceEventArgs.Name
+                $logline = "$(Get-Date), $changeType, $path, $name"
+                Add-content "C:\Trazadora\Historial.txt" -value $logline
+#Remove-Item 'C:\Users\Public\Documents\Trazados\recibidos' -Recurse
+                $material = 0
+                ##################################
+$form = New-Object System.Windows.Forms.Form
+$form.Text = 'Datos Bisel'
+$form.Size = New-Object System.Drawing.Size(300,450)
+$form.StartPosition = 'CenterScreen'
+
+
+$OKButton = New-Object System.Windows.Forms.Button
+$OKButton.Location = New-Object System.Drawing.Point(75,380)
+$OKButton.Size = New-Object System.Drawing.Size(75,23)
+$OKButton.Text = 'OK'
+$OKButton.DialogResult = [System.Windows.Forms.DialogResult]::OK
+$form.AcceptButton = $OKButton
+$form.Controls.Add($OKButton)
+
+$CancelButton = New-Object System.Windows.Forms.Button
+$CancelButton.Location = New-Object System.Drawing.Point(150,380)
+$CancelButton.Size = New-Object System.Drawing.Size(75,23)
+$CancelButton.Text = 'Cancel'
+$CancelButton.DialogResult = [System.Windows.Forms.DialogResult]::Cancel
+$form.CancelButton = $CancelButton
+$form.Controls.Add($CancelButton)
+
+###############################################################
+
+$objLabel = New-Object System.Windows.Forms.Label
+$objLabel.Location = New-Object System.Drawing.Size(10,20)
+$objLabel.Size = New-Object System.Drawing.Size(280,20)
+$objLabel.Text = "Por favor seleccione el tipo de lente:"
+$Form.Controls.Add($objLabel)
+
+# create your checkbox
+$checkbox1 = new-object System.Windows.Forms.checkbox
+$checkbox1.Location = new-object  System.Drawing.Point(30,40)
+$checkbox1.Size = new-object System.Drawing.Size(100,50)
+$checkbox1.Text = "Lentes Monofocales"
+$checkbox1.Checked = $false
+$Form.Controls.Add($checkbox1)  
+
+
+# create your checkbox
+$checkbox2 = new-object System.Windows.Forms.checkbox
+$checkbox2.Location = new-object System.Drawing.Point(130,40)
+$checkbox2.Size = new-object System.Drawing.Size(250,50)
+$checkbox2.Text = "Lentes Progresivos"
+$checkbox2.Checked = $false
+$Form.Controls.Add($checkbox2)  
+
+
+$checkbox1.Add_CheckStateChanged({
+if($checkbox1.Checked -eq $true){
+$checkbox2.Checked = $false
+$objTextBox3.Enabled=$false
+$objTextBox4.Enabled=$false
+}
+})
+
+  $checkbox2.Add_CheckStateChanged({
+if($checkbox2.Checked -eq $true){
+$checkbox1.Checked = $false
+$objTextBox3.Enabled=$true
+$objTextBox4.Enabled=$true
+}
+})
+
+##################################################################
+
+
+$objLabel = New-Object System.Windows.Forms.Label
+$objLabel.Location = New-Object System.Drawing.Size(10,100)
+$objLabel.Size = New-Object System.Drawing.Size(280,20)
+$objLabel.Text = "Por favor ingrese la DNP del O.D.:"
+$Form.Controls.Add($objLabel)
+
+$objTextBox = New-Object System.Windows.Forms.TextBox
+$objTextBox.Location = New-Object System.Drawing.Size(10,120)
+$objTextBox.Size = New-Object System.Drawing.Size(260,20)
+$Form.Controls.Add($objTextBox)
+
+$objLabel2 = New-Object System.Windows.Forms.Label
+$objLabel2.Location = New-Object System.Drawing.Size(10,140)
+$objLabel2.Size = New-Object System.Drawing.Size(280,20)
+$objLabel2.Text = "Por favor ingrese la DNP del O.I.:"
+$Form.Controls.Add($objLabel2)
+
+$objTextBox2 = New-Object System.Windows.Forms.TextBox
+$objTextBox2.Location = New-Object System.Drawing.Size(10,160)
+$objTextBox2.Size = New-Object System.Drawing.Size(260,20)
+$Form.Controls.Add($objTextBox2)
+
+$objLabel3 = New-Object System.Windows.Forms.Label
+$objLabel3.Location = New-Object System.Drawing.Size(10,180)
+$objLabel3.Size = New-Object System.Drawing.Size(280,20)
+$objLabel3.Text = "Por favor ingrese la Altura focal O.D.:"
+$Form.Controls.Add($objLabel3)
+
+$objTextBox3 = New-Object System.Windows.Forms.TextBox
+$objTextBox3.Location = New-Object System.Drawing.Size(10,200)
+$objTextBox3.Size = New-Object System.Drawing.Size(260,20)
+$Form.Controls.Add($objTextBox3)
+
+$objLabel4 = New-Object System.Windows.Forms.Label
+$objLabel4.Location = New-Object System.Drawing.Size(10,220)
+$objLabel4.Size = New-Object System.Drawing.Size(280,20)
+$objLabel4.Text = "Por favor ingrese la Altura focal O.I.:"
+$Form.Controls.Add($objLabel4)
+
+$objTextBox4 = New-Object System.Windows.Forms.TextBox
+$objTextBox4.Location = New-Object System.Drawing.Size(10,240)
+$objTextBox4.Size = New-Object System.Drawing.Size(260,20)
+$Form.Controls.Add($objTextBox4)
+
+$label = New-Object System.Windows.Forms.Label
+$label.Location = New-Object System.Drawing.Size(10,260)
+$label.Size = New-Object System.Drawing.Size(280,20)
+$label.Text = "Seleccione el material de los lentes:"
+$form.Controls.Add($label)
+
+
+$listBox = New-Object System.Windows.Forms.ListBox
+$listBox.Location = New-Object System.Drawing.Point(10,280)
+$listBox.Size = New-Object System.Drawing.Size(260,20)
+$listBox.Height = 80
+
+
+[void] $listBox.Items.Add("Polycarbonato")
+[void] $listBox.Items.Add("CR-39")
+[void] $listBox.Items.Add("1.56")
+[void] $listBox.Items.Add("Alto indice 1.60 o 1.67")
+
+$form.Controls.Add($listBox)
+
+$form.Topmost = $true
+
+$result = $form.ShowDialog()
